@@ -54,7 +54,7 @@ flags.DEFINE_bool('slim_model', False,
                   'Whether to expect only averaged variables.')
 
 
-def Eval(sess, num_actions, feature_sizes, domain_sizes, embedding_dims):
+def EvalForever(sess, num_actions, feature_sizes, domain_sizes, embedding_dims):
   """Builds and evaluates a network.
 
   Args:
@@ -88,6 +88,11 @@ def Eval(sess, num_actions, feature_sizes, domain_sizes, embedding_dims):
         beam_size=FLAGS.beam_size,
         max_steps=FLAGS.max_steps)
   task_context = FLAGS.task_context
+  while True:
+    if not Eval(sess, parser, task_context):
+      break
+
+def Eval(sess, parser, task_context):
   parser.AddEvaluation(task_context,
                        FLAGS.batch_size,
                        corpus_name=FLAGS.input,
@@ -133,6 +138,7 @@ def Eval(sess, num_actions, feature_sizes, domain_sizes, embedding_dims):
     logging.info('Seconds elapsed in evaluation: %.2f, '
                  'eval metric: %.2f%%', time.time() - t, eval_metric)
 
+  return num_documents
 
 def main(unused_argv):
   logging.set_verbosity(logging.INFO)
@@ -142,7 +148,7 @@ def main(unused_argv):
                                     arg_prefix=FLAGS.arg_prefix))
 
   with tf.Session() as sess:
-    Eval(sess, num_actions, feature_sizes, domain_sizes, embedding_dims)
+    EvalForever(sess, num_actions, feature_sizes, domain_sizes, embedding_dims)
 
 
 if __name__ == '__main__':
