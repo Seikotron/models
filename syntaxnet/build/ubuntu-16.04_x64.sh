@@ -27,7 +27,7 @@ echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-se
 apt-get install -y oracle-java8-installer
 apt-get install -y pkg-config zip zlib1g-dev unzip g++
 wget -q -nc https://github.com/bazelbuild/bazel/releases/download/0.3.1/bazel_0.3.1-linux-x86_64.deb
-dpkg -i bazel_0.2.2-linux-x86_64.deb
+dpkg -i bazel_0.3.1-linux-x86_64.deb
 
 # Other Prerequisites
 # -------------------
